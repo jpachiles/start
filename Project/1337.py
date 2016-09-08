@@ -1,24 +1,25 @@
 import os
 import urllib2
-from time import sleep
-import threading
+from threading import Thread
+from time import sleep, strftime
 
 
+def deface_verify(target, time):
 
-
-def deface_verify(target):
     site = target
     response = urllib2.urlopen(site)
     htmlold = response.read()
-    sleep(60)
-    response = urllib2.urlopen(site)
-    htmlnew = response.read()
-
-    if htmlold == htmlnew:
-        print 'Checked! Everything is ok !'
-    else:
-        print 'WARNING'
-    response.close()
+    while True:
+        response = urllib2.urlopen(site)
+        htmlnew = response.read()
+        if htmlold == htmlnew:
+            #date = strftime("%c")
+            #print 'Everything is ok at %s' % date
+            pass
+        else:
+            date = strftime("%c")
+            print 'WARNING at %s' % date
+        sleep(time)
 
 def welcome():
     logo =  '\033[1;31m __   __ ___  __  __ _   _  ___  __   __ \033[1;m\n'
@@ -73,12 +74,14 @@ def menu():
     print '0 - to exit'
     menuop = int(raw_input("How do you want to continue? (Menu Number).\n"))
     if menuop == 1:
-        # print 'Correct Login'
         print my_ip()
 
     elif menuop == 2:
         target = raw_input("Type the website that you want to verify? (Copy your browser url to a great verify)\n")
-        threading.Thread(target=deface_verify(target)).start()
+        time = 300
+        time_min = 300/60
+        Thread(target=deface_verify, args=(target,time)).start()
+        print 'I am checking your website each %i minutes.' % time_min
 
     elif menuop == 3:
         print 3
@@ -93,8 +96,6 @@ def menu():
         print 'The quieter you become, the more you are able to hear'
         exit (1)
 
-
-
 def main():
     if login():
         menu ()
@@ -102,4 +103,6 @@ def main():
 
 
 if __name__ == "__main__":
+    #aux = strftime("%c")
+    #print 'data %s' % aux
     main()
