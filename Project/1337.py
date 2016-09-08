@@ -1,7 +1,8 @@
 import os
 import urllib2
 from time import sleep
-from thread import start_new_thread
+import threading
+
 
 
 
@@ -62,7 +63,7 @@ def my_ip():
     result = ip + '\n' + mac
     return result
 
-def menu():
+def menu(): 
 
     os.system('cls' if os.name == 'nt' else 'clear')
     print welcome()
@@ -77,7 +78,7 @@ def menu():
 
     elif menuop == 2:
         target = raw_input("Type the website that you want to verify? (Copy your browser url to a great verify)\n")
-        start_new_thread(deface_verify(target), (60,))
+        threading.Thread(target=deface_verify(target)).start()
 
     elif menuop == 3:
         print 3
